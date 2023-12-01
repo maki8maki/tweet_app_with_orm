@@ -76,6 +76,73 @@ export const getUserWithPosts = async (
   return user;
 };
 
+export const getUserWithPostsIncludeRetweet = async (
+  userId: number
+): Promise<
+  | (UserWithoutPassword & {
+      posts: PostWithUser[];
+      retweets: Array<{
+        createdAt: Date;
+        user: UserWithoutPassword;
+        post: PostWithUser;
+      }>;
+    })
+  | null
+> => {
+  const prisma = databaseManager.getInstance();
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      ...selectUserColumnsWithoutPassword,
+      posts: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        select: {
+          id: true,
+          content: true,
+          userId: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              ...selectUserColumnsWithoutPassword,
+            },
+          },
+        },
+      },
+      retweets: {
+        select: {
+          createdAt: true,
+          user: {
+            select: {
+              ...selectUserColumnsWithoutPassword,
+            },
+          },
+          post: {
+            select: {
+              id: true,
+              content: true,
+              userId: true,
+              createdAt: true,
+              updatedAt: true,
+              user: {
+                select: {
+                  ...selectUserColumnsWithoutPassword,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (user === null) return null;
+  return user;
+};
+
 export const getUserLikedPosts = async (
   userId: number
 ): Promise<

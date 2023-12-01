@@ -10,6 +10,7 @@ import {
   getUser,
   updateUserProfile,
 } from "@/models/user";
+import {getUserPostTimeline} from "@/models/user_timeline";
 import {
   isUniqueEmail,
   ensureAuthUser,
@@ -61,10 +62,12 @@ userRouter.post(
 /** A page to show user details */
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
-  const user = await getUserWithPosts(Number(userId));
-  if (!user) return next(new Error("Invalid error: The user is undefined."));
+  const userTimeline = await getUserPostTimeline(Number(userId));
+  if (!userTimeline) return next(new Error("Invalid error: The user is undefined."));
+  const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
+    timeline,
   });
 });
 
