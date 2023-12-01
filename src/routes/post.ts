@@ -1,13 +1,7 @@
 import express from "express";
 import {body, validationResult} from "express-validator";
 import {formatDate} from "@/lib/convert_date";
-import {
-  getAllPosts,
-  getPost,
-  createPost,
-  updatePost,
-  deletePost,
-} from "@/models/post";
+import {getPost, createPost, updatePost, deletePost} from "@/models/post";
 import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
 import {getPostRetweetdCount, hasUserRetweetdPost} from "@/models/retweet";
 import {ensureAuthUser} from "@/middlewares/authentication";

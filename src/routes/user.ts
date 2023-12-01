@@ -5,7 +5,6 @@ import {nanoid} from "nanoid";
 import {
   getAllUsers,
   createUser,
-  getUserWithPosts,
   getUserLikedPosts,
   getUser,
   updateUserProfile,
