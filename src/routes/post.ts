@@ -12,12 +12,13 @@ import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
 import {getPostRetweetdCount, hasUserRetweetdPost} from "@/models/retweet";
 import {ensureAuthUser} from "@/middlewares/authentication";
 import {ensureOwnerOfPost} from "@/middlewares/current_user";
+import {getAllPostTimeline} from "@/models/user_timeline";
 export const postRouter = express.Router();
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
-  const postsWithUser = await getAllPosts();
+  const timeline = await getAllPostTimeline();
   res.render("posts/index", {
-    posts: postsWithUser,
+    timeline,
   });
 });
 

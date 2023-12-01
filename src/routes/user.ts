@@ -63,7 +63,8 @@ userRouter.post(
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const userTimeline = await getUserPostTimeline(Number(userId));
-  if (!userTimeline) return next(new Error("Invalid error: The user is undefined."));
+  if (!userTimeline)
+    return next(new Error("Invalid error: The user is undefined."));
   const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
